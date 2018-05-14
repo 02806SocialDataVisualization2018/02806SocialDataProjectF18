@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Final Project</title>
+		<script type="text/javascript" src="../../d3/d3.js"></script>
+		<script type="text/javascript" src="../../jquery/jquery-3.3.1.min.js"></script>
+		<link rel="stylesheet" href="html_style.css">
+	</head>
+	<body>
+			<div id="barchart"></div>
+			<div id="geoMap"></div>
+			<script type="text/javascript">
+var margin = {top: 20, right:20, bottom: 20, left: 20};
+
+var h = 600 - margin.top - margin.bottom;
+var w = 700 - margin.left - margin.right;
+
+var barChart = d3.select("#barChart")
+			.append("svg")
+			.attr("width", w)
+      .attr("height", h)
+
+//Dynamic scale of X axis
+function scaleX(timeSet, x) {
+	xScale = d3.scaleTime()
+             .domain([
+              	d3.min(timeSet, function(d) {console.log(d.values[0].key);
+                                                  return d.values[0].key;}),
+              	d3.max(timeSet, function(d) {return d.values[0].key;})
+             ])
+						.range([0, w])
+	return xScale(x);
+}
+
+//Dynamic scale of X axis
+function scaleY(data) {
+	xScale = d3.scaleLinear()
+             .domain([
+             		d3.min(data, function(d) {console.log(d.values[0].value);
+                                          	return d.values[0].value;}),
+              	d3.max(data, function(d) {return d.values[0].value;})
+						 ])
+						 .range([h, 0]);
+}
+
+function drawXaxis(data) {
+	//x axis
+	var xAxis = d3.axisBottom()
+								.scale(xScale)
+								.tickFormat(function(d,i){return MONTH[i];});
+
+}
+//timeFormat,parse() returns desied format
+var timeFormat = d3.timeFormat("%Y-%m-%d");
+
+function orderTime(dataSet) {
+
+	var dataByTime = d3.nest()
+											.key(function(d) {//console.log(d.date);
+																				console.log(Date.parse(d.date));
+																				return Date.parse(d.date);})
+											.sortKeys(d3.ascending)
+											.key(function(d) {//console.log(d.RPT_DT);
+																				console.log(timeFormat(Date.parse(d.date)));
+																				return d.date;})
+											.sortKeys(d3.ascending)
+											.rollup(function(count) {//console.log(count.length);//count
+																								return count.length;})
+											.entries(dataSet);
+	return dataByTime;
+}
+
+/*
+function drawSvgBar(barChart, data) {
+
+
+}
+*/
+function drawCollisionBar(){
+	$.ajax({
+	    url: "https://data.cityofnewyork.us/resource/qiz3-axqb.json",
+	    type: "GET",
+	    data: {
+	      "$limit" : 12600,
+	      "$$app_token" : "IR7fj2jEA3C4xrFJtfaG8DycF"
+	    }
+	}).done(function(data) {
+	  alert("Retrieved " + data.length + " records from the dataset!");
+	  console.log(data);
+		//drawSvgBar(barChart, data);
+
+	//New data set need to be preodered in ascending maner.
+	var dataByTime = orderTime(data);
+	//console.log(dataByTime);
+	scaleX(dataByTime);
+	scaleY(dataByTime);
+
+  });
+}
+drawCollisionBar()
+
+		</script>
+	</body>
+</html>

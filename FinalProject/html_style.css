@@ -1,0 +1,12 @@
+svg {
+  margin-left: 200px;
+  margin-right: 170px;
+  padding: 1em;
+  overflow: hidden;
+}
+.point{
+  fill: "black";
+  stroke: "gray";
+  stroke-width": 0.25;
+  opacity": 0.75;
+}

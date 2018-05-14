@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <title>Final Project</title>
+      <script type="text/javascript" src="../../jquery/jquery-3.3.1.min.js"></script>
+      <script type="text/javascript" src="../../d3/d3.js"></script>
+      <link rel="stylesheet" type="text/css" href="html_style.css">
+
+
+    </body>
+
+<script type="text/javascript">
+$.ajax({
+    url: "https://data.cityofnewyork.us/resource/qiz3-axqb.json",
+    type: "GET",
+    data: {
+      "$limit" : 10000,
+      "$$app_token" : "IR7fj2jEA3C4xrFJtfaG8DycF"
+    }
+}).done(function(data) {
+  alert("Retrieved " + data.length + " records from the dataset!");
+  console.log(data);
+});
+
+</script>
+    <body>
+	   <footer>Final Project</footer>
+  </body>
+</head>
+</html>
